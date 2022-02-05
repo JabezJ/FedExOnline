@@ -13,6 +13,10 @@ public class FedexOnlinePage {
    public static Target LogIn = Target.the("LogIn").located(By.xpath("//a[@title='Log In']"));
    public static Target SignOut = Target.the("SignOut").located(By.xpath("//a[@title='SIGN OUT']"));
 
+   public static Target InvalidCredentials = Target.the("Invalid Credentials").located(By.xpath("//div[@id='invalidCredentials']"));
+
+
+
    public static final Target UserOption = Target.the("UserOption").locatedBy("//span[normalize-space()='{0}']");
 
    public static Target USER = Target.the("userId").located(By.xpath("//input[@id='userId']"));

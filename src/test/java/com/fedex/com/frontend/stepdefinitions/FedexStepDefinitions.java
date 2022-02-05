@@ -110,11 +110,12 @@ public class FedexStepDefinitions extends UIInteractionSteps {
                                 WaitUntil.the(ContinueEntry,isVisible()).forNoMoreThan(5).seconds(),
                                 JavaScriptClick.on(ContinueEntry),
 
-                               // JavaScriptClick.on(PackageType),
-                              //  JavaScriptClick.on(PackOption.of(shipment.get(0).get("PackageType"))),
-
-                              //  JavaScriptClick.on(PackageQuantity),
-                              //  JavaScriptClick.on(PackOption.of(shipment.get(0).get("PackageQuantity"))),
+                               //Package type selection
+                              /*  JavaScriptClick.on(PackageType),
+                                JavaScriptClick.on(PackOption.of(shipment.get(0).get("PackageType"))),
+                                JavaScriptClick.on(PackageQuantity),
+                                JavaScriptClick.on(PackOption.of(shipment.get(0).get("PackageQuantity"))),
+                               */
 
                                 Enter.theValue(shipment.get(0).get("PackageWeight")).into(PackageWeight),
                                 JavaScriptClick.on(PackageDetailsSubmit)
@@ -147,6 +148,44 @@ public class FedexStepDefinitions extends UIInteractionSteps {
     public void customerShouldSeeTheTrackingServiceSelectedAsDefault(Actor actor) {
         actor.should(seeThat(stateOf(TrackingNumber),isVisible()));
         actor.should(seeThat(stateOf(Track),isVisible()));
+    }
+
+    @When("{actor} attempts to log into fedex.com portal account with credentials {string} and {string}")
+    public void customerAttemptsToLogIntoFedexComPortalAccountWithCredentialsAnd(Actor actor,String user, String password) throws Exception {
+        System.out.println(user);
+        System.out.println(password);
+        actor.attemptsTo(
+                Login.intoFedExOnline(user,password)
+        );
+    }
+
+    @Then("{actor} should not be logged in")
+    public void customerShouldNotBeLoggedIn(Actor actor) {
+        actor.should(seeThat(stateOf(InvalidCredentials),isVisible()));
+        actor.should(seeThat(TheTarget.textOf(InvalidCredentials),containsString("Login incorrect. Either the user ID or password combination is incorrect, or the account has been locked. Please try again or reset your password.")));
+    }
+
+    @And("{actor} navigates to Calculate FedEx® shipment page")
+    public void customerNavigatesToCalculateFedExShipmentPage(Actor actor) {
+        actor.attemptsTo(
+                JavaScriptClick.on(FDXCube.of("SHIP"))
+        );
+    }
+
+    @When("{actor} attempts to track the postal by tracking number {string}")
+    public void customerAttemptsToTrackThePostalByTrackingNumber(Actor actor,String trackingNum) {
+        actor.should(seeThat(stateOf(TrackingNumber),isVisible()));
+        actor.should(seeThat(stateOf(Track),isVisible()));
+        actor.attemptsTo(
+                Enter.theValue(trackingNum).into(TrackingNumber).thenHit(Keys.TAB),
+                JavaScriptClick.on(Track)
+        );
+
+    }
+
+    @Then("{actor} should be able to see the shipment status")
+    public void customerShouldBeAbleToSeeTheShipmentStatus(Actor actor) {
+
     }
 }
 

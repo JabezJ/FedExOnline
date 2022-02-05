@@ -4,10 +4,11 @@ import com.fedex.com.frontend.pageObjects.FedexOnlinePage;
 import com.fedex.com.frontend.waits.WaitFor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
-import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.actions.JavaScriptClick;
 import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.openqa.selenium.Keys;
+
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
 
 public class Login {
@@ -17,10 +18,10 @@ public class Login {
                 JavaScriptClick.on(FedexOnlinePage.LogIn),
                 WaitUntil.the(FedexOnlinePage.USER,isVisible()).forNoMoreThan(5).seconds(),
                 Enter.theValue(user).into(FedexOnlinePage.USER),
-                Enter.theValue(pass).into(FedexOnlinePage.PASS),
+                Enter.theValue(pass).into(FedexOnlinePage.PASS).thenHit(Keys.TAB).thenHit(Keys.TAB).thenHit(Keys.TAB),
                 WaitFor.noMoreThan(3).seconds(),
                 WaitUntil.the(FedexOnlinePage.LogIn_Btn,isVisible()).forNoMoreThan(5).seconds(),
-                Click.on(FedexOnlinePage.LogIn_Btn)
+                JavaScriptClick.on(FedexOnlinePage.LogIn_Btn)
         );
     }
 
