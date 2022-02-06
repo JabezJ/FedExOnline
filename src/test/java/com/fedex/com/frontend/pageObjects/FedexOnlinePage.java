@@ -50,4 +50,6 @@ public class FedexOnlinePage {
    public static Target TrackingNumber = Target.the("Tracking number").located(By.xpath("//*[@id='HomeTrackingApp']/div/input[1]"));
    public static Target Track = Target.the("Track").located(By.xpath("//button[@id='btnSingleTrack']"));
 
+   public static final Target FedexMenuOption = Target.the("FedexMenuOption").locatedBy("//a[normalize-space()='{0}']");
+
 }

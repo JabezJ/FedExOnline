@@ -7,6 +7,6 @@ import org.junit.runner.RunWith;
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
         plugin = {"pretty"},
-        features = "src/test/resources/features/connect/OC2/run/FedEx_Tracking.feature"
+        features = "src/test/resources/features/"
 )
 public class BDD_UI_TestSuiteRunner {}

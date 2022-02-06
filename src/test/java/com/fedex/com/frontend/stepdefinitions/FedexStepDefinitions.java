@@ -11,6 +11,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.actions.JavaScriptClick;
 import net.serenitybdd.screenplay.actors.Cast;
@@ -21,6 +22,7 @@ import net.serenitybdd.screenplay.questions.targets.TheTarget;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 import java.util.Map;
@@ -186,6 +188,37 @@ public class FedexStepDefinitions extends UIInteractionSteps {
     @Then("{actor} should be able to see the shipment status")
     public void customerShouldBeAbleToSeeTheShipmentStatus(Actor actor) {
 
+    }
+
+    @And("{actor} selects the dropdown menu {string}")
+    public void customerSelectsTheDropdownMenu(Actor actor, String menuTitle) {
+        actor.should(seeThat(stateOf(FedexMenuOption.of(menuTitle)),isVisible()));
+        actor.attemptsTo(
+                JavaScriptClick.on(FDXCube.of(menuTitle))
+        );
+    }
+
+    @Then("{actor} should have access to the following {string} menu features")
+    public void customerShouldHaveAccessToFollowingFeatures(Actor actor,String menuTitle,List<Map<String, String>> menu) {
+        for (int i=0; i < menu.size(); i++) {
+            actor.should(seeThat(stateOf(FedexMenuOption.of(menu.get(i).get("MenuOption"))), isVisible()));
+            actor.attemptsTo(
+                    JavaScriptClick.on(FedexMenuOption.of(menu.get(i).get("MenuOption"))),
+                    WaitFor.noMoreThan(5).seconds()
+            );
+            WebDriver driver = BrowseTheWeb.as(actor).getDriver();
+            String featureUrl = driver.getCurrentUrl();
+            System.out.println(featureUrl);
+            driver.navigate().back();
+            actor.attemptsTo(
+                WaitFor.noMoreThan(5).seconds(),
+                WaitUntil.the(FedexMenuOption.of(menuTitle),isVisible()).forNoMoreThan(5).seconds()
+            );
+            actor.should(seeThat(stateOf(FedexMenuOption.of(menuTitle)), isVisible()));
+            actor.attemptsTo(
+                    JavaScriptClick.on(FDXCube.of(menuTitle))
+            );
+        }
     }
 }
 
